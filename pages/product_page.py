@@ -1,6 +1,5 @@
 from .base_page import BasePage
 from .locators import ProductPageLocators
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoAlertPresentException
 import math
 
@@ -26,15 +25,25 @@ class ProductPage(BasePage):
             print("No second alert presented")
 
     def message_about_product_add_in_basket(self):
-        assert self.is_element_present(*ProductPageLocators.SUCCES_MESSAGE_PRODUCT_IN_BASKET), "Сообщения об успешном добавлении товара в корзину нет"
+        assert self.is_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Сообщения об успешном добавлении товара в корзину нет"
         product_name = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text
         product_name_in_message = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME_IN_MESSAGE).text
-        assert product_name == product_name_in_message, "Имя товара в сообщении отличается от имени добавляемого товара"
+        assert product_name == product_name_in_message, \
+            "Имя товара в сообщении отличается от имени добавляемого товара"
 
     def price_of_product_in_basket(self):
-        assert self.is_element_present(*ProductPageLocators.MESSAGE_SUM_IN_BASKET), "Нет сообщения со стоимостью товара в корзине"
+        assert self.is_element_present(*ProductPageLocators.MESSAGE_SUM_IN_BASKET), \
+            "Нет сообщения со стоимостью товара в корзине"
         product_price = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
         product_price_in_message = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_IN_MESSAGE).text
-        assert product_price == product_price_in_message, "Стоимость товара в сообщении отличается от стоимости добавляемого товара"
+        assert product_price == product_price_in_message, \
+            "Стоимость товара в сообщении отличается от стоимости добавляемого товара"
 
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
 
+    def should_not_be_success_message_disappeared(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
